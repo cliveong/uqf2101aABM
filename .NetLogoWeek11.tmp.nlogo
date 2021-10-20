@@ -58,6 +58,10 @@ end
 
 to get-unquarantine
   set quarantine? false
+  if [vaccine?]
+  [ set color white
+    [else
+      set color green]]
 end
 
 
@@ -205,6 +209,21 @@ GRAPHICS-WINDOW
 1
 ticks
 30.0
+
+SLIDER
+0
+0
+0
+0
+NIL
+NIL
+0
+100
+50.0
+1
+1
+NIL
+HORIZONTAL
 
 BUTTON
 19
@@ -362,36 +381,6 @@ immunity
 0
 100
 1.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-22
-446
-194
-479
-initialinfected
-initialinfected
-0
-100
-30.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-20
-485
-192
-518
-elderly
-elderly
-0
-100
-50.0
 1
 1
 NIL
