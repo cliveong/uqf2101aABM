@@ -1,21 +1,19 @@
 turtles-own
 [ sick?
   immune?
-  vaccine?
+  vaccine? ;boolean to see if turtle is vaccinated
   sick-count
   immune-count
   vaccine-count
   numOfSocialGathering
   dead?
-  elderly?
-  quarantine?
 ]
 
 globals
 [
   %infected
   %immune
-  %vaccinated
+  %vaccinated ; vaccinated % monitor
 ]
 
 to setup
@@ -37,30 +35,7 @@ to setup-turtles
   ]
   ask n-of initialInfected turtles
     [get-sick]
-  ask n-of elderly turtles
-  [get-old]
 end
-
-to get-old
-  set elderly? true
-  set color yellow
-end
-
-to get-dead
-  set dead? true
-  set color black
-end
-
-to get-quarantine
-  set quarantine? true
-  set color orange
-end
-
-to get-unquarantine
-  set quarantine? false
-end
-
-
 
 to get-sick
   set sick? true
@@ -90,7 +65,7 @@ to become-unimmune
   set color blue
 end
 
-to get-vaccinated
+to get-vaccinated  ; set newly vacc turtles to white
   set vaccine? true
   set color white
 end
@@ -119,7 +94,7 @@ to update-global-variables
   [
     set %infected (count turtles with [sick?]) / (count turtles) * 100
     set %immune (count turtles with [immune?]) / (count turtles) * 100
-    set %vaccinated (count turtles with [vaccine?]) / (count turtles) * 100
+    set %vaccinated (count turtles with [vaccine?]) / (count turtles) * 100 ;update vaccinated turtles
   ]
 end
 
@@ -137,8 +112,8 @@ to get-older
 end
 
 to vaccine
-  ask turtles with [not sick?]
-    [if (random-float 100 < vaccination-rate)
+  ask turtles with [not sick? and not vaccine?]
+    [if (random-float 100 < vaccination-rate) ;on average, vaccinates vaccination-rate% of the unsick+unvax turtles every tick
       [get-vaccinated]]
 end
 
@@ -153,7 +128,7 @@ to infect
   ask turtles with [sick?]
   [ask other turtles-here with [ not immune?]
     [ask other turtles-here with [vaccine?]
-      [if (random-float 100) + immunity < infectiousness
+      [if (random-float 100) + immunity < infectiousness ; provides a set level of increased immunity. if infectiousness is 50 and immunity is 10, this means infectiousness is 40
         [get-sick]]]]
     ask turtles with [sick?]
   [ask other turtles-here with [ vaccine? and not immune?]
@@ -177,7 +152,6 @@ to lose-immunity
     [become-unimmune]
   ]
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -230,7 +204,7 @@ BUTTON
 46
 NIL
 Go
-NIL
+T
 1
 T
 OBSERVER
@@ -249,7 +223,7 @@ people
 people
 0
 200
-54.0
+200.0
 1
 1
 NIL
@@ -346,7 +320,7 @@ vaccination-rate
 vaccination-rate
 0
 100
-24.0
+6.0
 1
 1
 NIL
@@ -396,6 +370,17 @@ elderly
 1
 NIL
 HORIZONTAL
+
+MONITOR
+211
+456
+297
+501
+NIL
+%vaccinated
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
